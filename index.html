@@ -1,0 +1,443 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Architecture SEM v2 — SAQ &amp; Télé-Québec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0E1013; --panel:#171A20; --panel-2:#1D2129; --line:#2A2F39;
+    --text:#EDEEF0; --text-dim:#9BA1AD; --text-faint:#656B78;
+    --yellow:#FFEE00; --saq:#B23A52; --saq-dim:#4A2029; --tq:#29B6A6; --tq-dim:#163632;
+    --amber:#E0A83E; --red:#D65C5C; --green:#5CBE7E; --blue:#5B9BD5;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.55;}
+  h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;margin:0;letter-spacing:-0.01em;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px 100px;}
+
+  header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,#12141A 0%,#0E1013 100%);}
+  .header-inner{max-width:1180px;margin:0 auto;padding:34px 28px 0;}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--yellow);text-transform:uppercase;margin-bottom:10px;}
+  h1{font-size:32px;font-weight:700;}
+  .subtitle{color:var(--text-dim);font-size:15px;margin-top:8px;max-width:720px;}
+  .meta-row{display:flex;gap:22px;margin-top:20px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-faint);}
+  .meta-row span b{color:var(--text-dim);}
+
+  .tabs{display:flex;margin-top:26px;}
+  .tab{flex:1;text-align:left;padding:15px 20px;background:transparent;border:none;border-bottom:3px solid var(--line);cursor:pointer;font-family:'Space Grotesk',sans-serif;color:var(--text-faint);transition:all .15s ease;}
+  .tab .tlabel{font-size:16px;font-weight:600;display:block;}
+  .tab .tsub{font-family:'JetBrains Mono',monospace;font-size:11px;margin-top:3px;display:block;}
+  .tab[data-acc="corr"].active{border-bottom-color:var(--yellow);color:var(--text);}
+  .tab[data-acc="saq"].active{border-bottom-color:var(--saq);color:var(--text);}
+  .tab[data-acc="tq"].active{border-bottom-color:var(--tq);color:var(--text);}
+  .tab:hover{color:var(--text);}
+
+  section.acc{display:none;padding-top:34px;}
+  section.acc.active{display:block;animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .block-title{display:flex;align-items:baseline;gap:10px;margin:44px 0 16px;}
+  .block-title .num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text-faint);}
+  .block-title h2{font-size:20px;border-left:3px solid var(--line);padding-left:12px;}
+  section.acc[data-acc="saq"] .block-title h2{border-left-color:var(--saq);}
+  section.acc[data-acc="tq"] .block-title h2{border-left-color:var(--tq);}
+  section.acc[data-acc="corr"] .block-title h2{border-left-color:var(--yellow);}
+  .lede{color:var(--text-dim);font-size:14.5px;max-width:780px;margin-bottom:18px;}
+
+  .card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  .ccard{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;border-left:3px solid var(--line);}
+  .ccard.ok{border-left-color:var(--green);}
+  .ccard.warn{border-left-color:var(--amber);}
+  .ccard.bad{border-left-color:var(--red);}
+  .ccard h4{font-size:14px;margin-bottom:8px;}
+  .ccard p{font-size:13px;color:var(--text-dim);margin:0;}
+  .ccard p b{color:var(--text);}
+
+  .conf{font-family:'JetBrains Mono',monospace;font-size:10px;padding:2px 8px;border-radius:20px;margin-left:8px;vertical-align:middle;}
+  .conf.v{background:#12321F;color:var(--green);}
+  .conf.q{background:#3A2E12;color:var(--amber);}
+
+  .tree{border-left:1px dashed var(--line);margin-left:8px;padding-left:22px;}
+  .node{position:relative;margin:4px 0;}
+  .node::before{content:"";position:absolute;left:-22px;top:16px;width:16px;height:1px;background:var(--line);}
+  .node-head{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:11px 14px;cursor:pointer;user-select:none;}
+  .node-head:hover{border-color:var(--text-faint);}
+  .node-head .chev{font-size:11px;color:var(--text-faint);transition:transform .15s ease;width:10px;}
+  .node.open > .node-head .chev{transform:rotate(90deg);}
+  .node-head .id{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-faint);min-width:26px;}
+  .node-head .title{font-size:13.5px;font-weight:600;}
+  .node-head .desc{font-size:12px;color:var(--text-dim);margin-left:auto;text-align:right;max-width:380px;}
+  .badge{font-family:'JetBrains Mono',monospace;font-size:10px;padding:2px 7px;border-radius:20px;}
+  .badge.fr{background:var(--saq-dim);color:#E8A9B6;}
+  .badge.en{background:#2A2632;color:#B7AEDB;}
+  .badge.frtq{background:var(--tq-dim);color:#8FE0D3;}
+  .badge.keep{background:#1E2A1E;color:var(--green);}
+  .badge.cond{background:#332214;color:var(--amber);}
+  .children{display:none;margin-top:6px;}
+  .node.open > .children{display:block;}
+  .leaf{margin:6px 0;padding:9px 14px;background:var(--panel-2);border:1px solid var(--line);border-radius:7px;font-size:12.5px;color:var(--text-dim);}
+  .leaf b{color:var(--text);font-weight:600;}
+  .leaf .lp{display:block;margin-top:3px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-faint);}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{text-align:left;font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-faint);padding:10px 12px;border-bottom:1px solid var(--line);}
+  td{padding:11px 12px;border-bottom:1px solid var(--line);color:var(--text-dim);}
+  tr:last-child td{border-bottom:none;}
+  td.kw{color:var(--text);font-weight:500;}
+  .qsval{font-family:'JetBrains Mono',monospace;padding:2px 9px;border-radius:20px;font-size:11.5px;}
+  .qs1{background:#3A1518;color:var(--red);}
+  .qsA{background:#3A2E12;color:var(--amber);}
+  .qsG{background:#12321F;color:var(--green);}
+
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;}
+  .stat .big{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;color:var(--tq);}
+  .stat .lbl{font-size:12px;color:var(--text-dim);margin-top:6px;}
+
+  .callout{border:1px solid var(--line);border-left:3px solid var(--blue);background:var(--panel);border-radius:8px;padding:16px 20px;margin-top:16px;}
+  .callout h4{font-size:13px;color:var(--blue);margin-bottom:6px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.05em;}
+  .callout p{font-size:13px;color:var(--text-dim);margin:0;}
+  .callout p b{color:var(--text);}
+  .callout.red{border-left-color:var(--red);} .callout.red h4{color:var(--red);}
+  .callout.green{border-left-color:var(--green);} .callout.green h4{color:var(--green);}
+  .callout.amber{border-left-color:var(--amber);} .callout.amber h4{color:var(--amber);}
+  .callout.yellow{border-left-color:var(--yellow);} .callout.yellow h4{color:var(--yellow);}
+
+  .fix-grid{display:flex;flex-direction:column;gap:14px;}
+  .fix{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  .fix .before,.fix .after{padding:16px 20px;font-size:13px;}
+  .fix .before{background:#1A1418;border-right:1px solid var(--line);}
+  .fix .after{background:#131A17;}
+  .fix .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;}
+  .fix .before .lbl{color:var(--red);}
+  .fix .after .lbl{color:var(--green);}
+  .fix p{margin:0;color:var(--text-dim);}
+  .fix p b{color:var(--text);}
+
+  .neg-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+  .neg-chip{font-family:'JetBrains Mono',monospace;font-size:11.5px;padding:5px 11px;border-radius:20px;background:#241417;border:1px solid #3A2028;color:#D69AA6;}
+
+  footer{border-top:1px solid var(--line);margin-top:60px;padding-top:26px;color:var(--text-faint);font-size:12px;font-family:'JetBrains Mono',monospace;}
+
+  @media(max-width:760px){
+    .card-grid,.stat-grid{grid-template-columns:1fr;}
+    .fix{grid-template-columns:1fr;}
+    .fix .before{border-right:none;border-bottom:1px solid var(--line);}
+    .node-head .desc{display:none;}
+    h1{font-size:24px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="eyebrow">Cossette Média // SEM Command Center</div>
+    <h1>Architecture Google Ads — v2 révisée</h1>
+    <p class="subtitle">SAQ &amp; Télé-Québec — reconstruction complète après audit des erreurs des versions précédentes. Chaque fait porte un marqueur : <span class="conf v">vérifié</span> = confirmé dans les sessions de travail récentes · <span class="conf q">à confirmer</span> = non sourcé solidement, ne pas agir dessus sans validation.</p>
+    <div class="meta-row">
+      <span><b>Préparé par</b> Tommy Dubé</span>
+      <span><b>Version</b> 2.0 — 12 juillet 2026</span>
+      <span><b>Statut</b> Proposition à valider morceau par morceau</span>
+    </div>
+    <div class="tabs">
+      <button class="tab active" data-acc="corr" onclick="switchAcc('corr')">
+        <span class="tlabel">⚠ Corrections v1 → v2</span>
+        <span class="tsub">lire en premier</span>
+      </button>
+      <button class="tab" data-acc="saq" onclick="switchAcc('saq')">
+        <span class="tlabel">SAQ</span>
+        <span class="tsub">e-commerce · 80% FR / 20% EN</span>
+      </button>
+      <button class="tab" data-acc="tq" onclick="switchAcc('tq')">
+        <span class="tlabel">Télé-Québec</span>
+        <span class="tsub">engagement · FR uniquement</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ============ CORRECTIONS ============ -->
+<section class="acc active" data-acc="corr">
+
+  <div class="block-title"><span class="num">0.1</span><h2>Ce qui était faux dans les versions précédentes</h2></div>
+  <div class="lede">Trois erreurs de fond ont été identifiées et corrigées. Elles changent la structure — pas juste des détails.</div>
+
+  <div class="fix-grid">
+    <div class="fix">
+      <div class="before"><div class="lbl">✗ v1 — faux</div><p><b>Tracking via GTM</b> — « mono-tag GA4 via conteneur GTM, accès lecture seule, escalade requise pour l'écriture ».</p></div>
+      <div class="after"><div class="lbl">✓ v2 — corrigé</div><p><b>Aucun tag GTM sur SAQ ni TQ.</b> GA4 single-tag, conversions importées de GA4 dans Google Ads. Store Visits SAQ modélisées entièrement par Google (SAQ ne tracke rien). Les corrections de conversions se font dans GA4 + paramètres d'import Ads — aucune dépendance GTM à escalader.</p></div>
+    </div>
+    <div class="fix">
+      <div class="before"><div class="lbl">✗ v1 — faux</div><p><b>Fenêtre TQ « cassée »</b> — « video_start réduite par erreur de 90 à 30 jours, à corriger dans GA4 en préalable ».</p></div>
+      <div class="after"><div class="lbl">✓ v2 — corrigé</div><p><b>Changement intentionnel</b>, décidé par Alexandre avec le client (2 juin). Rien à « réparer ». Conséquence réelle : les comparaisons pré/post 2 juin ne sont pas valides, et les cibles d'enchères doivent être calibrées sur la réalité 30 jours.</p></div>
+    </div>
+    <div class="fix">
+      <div class="before"><div class="lbl">✗ v1 — non optimal</div><p><b>SKAG par produit</b> — un groupe dédié par cocktail/spiritueux (Dirty Martini, tequila sunrise...), généralisé à tout le compte.</p></div>
+      <div class="after"><div class="lbl">✓ v2 — corrigé</div><p><b>Thème serré par défaut</b> : un groupe = une intention, plusieurs mots-clés apparentés. « Cocktails-recettes » est UN groupe. Le fix QS = alignement annonce/LP au niveau du groupe d'intention. Consolidation des données pour Smart Bidding, pas fragmentation.</p></div>
+    </div>
+  </div>
+
+  <div class="block-title"><span class="num">0.2</span><h2>Fait nouveau intégré — 17 août 2026</h2></div>
+  <div class="callout amber">
+    <h4>Cibles tROAS/tCPA = planchers durs sur campagnes limitées par budget</h4>
+    <p>À partir du 17 août, Google applique strictement les cibles sur les campagnes limitées par budget. Impact direct : (1) la question shopping-fea avec Alexandre (tROAS 100% posé le 7 juillet) est urgente avant cette date, (2) toute nouvelle campagne de cette architecture démarre <b>sans cible</b> — la cible s'ajoute seulement quand le volume de conversion est stable ET que le budget n'est pas limitant.</p>
+  </div>
+
+  <div class="block-title"><span class="num">0.3</span><h2>Points encore ouverts — ne pas agir dessus</h2></div>
+  <div class="card-grid">
+    <div class="ccard warn"><h4>Store Visits exclues du ROAS <span class="conf q">à confirmer</span></h4><p>Retirées par Melissa (fév. 2025) — portée exacte à confirmer : réglage de compte ou spécifique à shopping-fea?</p></div>
+    <div class="ccard warn"><h4>Add to Cart / Phone Call Lead <span class="conf q">à confirmer</span></h4><p>Affirmé « mal configurées » en v1 sans source solide retrouvée. À vérifier dans l'interface avant toute décision d'enchères.</p></div>
+    <div class="ccard warn"><h4>Split 80/20 — portée <span class="conf q">à confirmer</span></h4><p>Confirmé pour Search. S'applique-t-il aussi à Shopping/PMax? Traité comme oui par défaut dans cette version, à valider.</p></div>
+    <div class="ccard warn"><h4>Statut « contenu enfants » TQ <span class="conf q">à confirmer</span></h4><p>Conditionne ce que le bloc Vidéo/Demand Gen peut cibler. À vérifier avec Melissa/Émilie avant construction.</p></div>
+  </div>
+
+</section>
+
+<!-- ============ SAQ ============ -->
+<section class="acc" data-acc="saq">
+
+  <div class="block-title"><span class="num">1.1</span><h2>Contraintes structurantes</h2></div>
+  <div class="card-grid">
+    <div class="ccard ok"><h4>Politique alcool Google <span class="conf v">vérifié</span></h4><p>PMax « restrictive » = <b>normal</b> pour l'alcool, pas un problème. Statut attendu des annonces : Eligible (Limited). Aucun ciblage de mineurs. Audiences prédéfinies Google seulement — le remarketing est interdit par la politique alcool elle-même, indépendamment de la Loi 25.</p></div>
+    <div class="ccard ok"><h4>Loi 25 <span class="conf v">vérifié</span></h4><p>Personnalisation désactivée sur le lien GA4-Ads depuis juin 2023. Pas de Customer Match, pas de listes basées sur données personnelles. Double contrainte avec la politique alcool.</p></div>
+    <div class="ccard ok"><h4>Tracking <span class="conf v">vérifié</span></h4><p><b>Aucun GTM.</b> GA4 single-tag, conversions importées. Purchase = import GA4. Store Visit = modélisée par Google. Pilotage des enchères sur ces deux-là.</p></div>
+    <div class="ccard warn"><h4>shopping-fea — gelée <span class="conf v">vérifié</span></h4><p>tROAS 100% + budget 140$→60$ posés par Alexandre le 7 juillet. <b>Ne pas toucher</b> avant la discussion avec lui (intention? au courant du 17 août?). Son ROAS affiché exclut les Store visits.</p></div>
+  </div>
+
+  <div class="block-title"><span class="num">1.2</span><h2>Couverture complète du compte</h2></div>
+  <table style="margin-bottom:8px;">
+    <tr><th>Levier</th><th>Statut dans cette architecture</th></tr>
+    <tr><td class="kw">Search Brand FR + EN</td><td>Inclus — 3 groupes définis par langue (voir arbre 1.3)</td></tr>
+    <tr><td class="kw">Search Non-Brand FR + EN</td><td>Inclus — 7 groupes d'intention par langue, mots-clés vérifiés placés</td></tr>
+    <tr><td class="kw">Shopping FR + EN</td><td>Inclus — groupes de produits par catégorie, priorité Haute</td></tr>
+    <tr><td class="kw">Performance Max FR + EN</td><td>Inclus — 4 asset groups par langue, anti-cannibalisation</td></tr>
+    <tr><td class="kw">Display / Demand Gen</td><td><b>Non inclus au rebuild</b> — aucune donnée vérifiée sur l'existant dans nos échanges; à discuter séparément si besoin</td></tr>
+    <tr><td class="kw">AVV / Recettes / RH / shopping-fea</td><td>Conservées telles quelles — hors rebuild (intentionnelles ✓)</td></tr>
+    <tr><td class="kw">Négatifs</td><td>83 termes validés migrent tels quels ✓</td></tr>
+    <tr><td class="kw">Annonces</td><td>Angle RSA défini par groupe dans l'arbre — textes finaux à rédiger avec les gabarits de marque SAQ</td></tr>
+  </table>
+
+  <div class="block-title"><span class="num">1.3</span><h2>Arborescence — nouvelles campagnes</h2></div>
+  <div class="lede">Split 80% FR / 20% EN. Chaque langue = sa propre campagne. Groupes à thème serré (une intention, plusieurs mots-clés apparentés) — aucun groupe mono-produit. Clique pour déplier.</div>
+  <div class="tree" id="tree-saq"></div>
+
+  <div class="block-title"><span class="num">1.4</span><h2>Le fix QS — alignement, pas fragmentation</h2></div>
+  <div class="lede">Les 4 termes problématiques documentés se règlent dans leur groupe d'intention, par l'annonce et la landing page — pas par des groupes dédiés.</div>
+  <table>
+    <tr><th>Terme</th><th>QS</th><th>Dépense</th><th>Groupe de destination</th><th>Fix</th></tr>
+    <tr><td class="kw">Dirty Martini (EN)</td><td><span class="qsval qs1">1/10</span></td><td>1 006 $</td><td class="mono">cocktails-recettes-en</td><td>Annonce orientée recette + LP recette (dédiée confirmée existante <span class="conf v">vérifié</span>)</td></tr>
+    <tr><td class="kw">tequila sunrise</td><td><span class="qsval qs1">1/10</span></td><td>722 $</td><td class="mono">cocktails-recettes</td><td>Même logique — LP actuelle à vérifier d'abord <span class="conf q">à confirmer</span></td></tr>
+    <tr><td class="kw">vin du Québec</td><td><span class="qsval qsA">3-4/10</span></td><td>5 403 $</td><td class="mono">vins-region-qc</td><td>Groupe d'intention régionale + LP catégorie vins québécois</td></tr>
+    <tr><td class="kw">wine pairing (EN)</td><td><span class="qsval qsA">5/10</span></td><td>4 368 $</td><td class="mono">vins-accords-en</td><td>Groupe accords + LP guide accords</td></tr>
+  </table>
+  <div class="callout green">
+    <h4>Règle générale</h4>
+    <p>Un terme à QS bas ne justifie <b>jamais à lui seul</b> un nouveau groupe. La question est toujours : « est-ce que l'annonce et la LP de son groupe répondent à son intention? » Si non → réaligner l'annonce/LP du groupe, ou déplacer le terme vers le groupe d'intention qui lui correspond.</p>
+  </div>
+
+  <div class="block-title"><span class="num">1.5</span><h2>Enchères — règle du 17 août</h2></div>
+  <div class="card-grid">
+    <div class="ccard ok"><h4>Phase 1 — lancement</h4><p>Max Conversion Value (ou Max Conversions selon campagne) <b>sans cible</b>. Laisser l'apprentissage se faire sur Purchase + Store Visit.</p></div>
+    <div class="ccard ok"><h4>Phase 2 — cible</h4><p>Ajouter tROAS seulement quand : volume de conversion stable + budget non limitant. Sinon la cible devient un plancher dur (17 août) qui étouffe la diffusion.</p></div>
+  </div>
+
+  <div class="block-title"><span class="num">1.6</span><h2>Ce qui migre tel quel</h2></div>
+  <div class="card-grid">
+    <div class="ccard ok"><h4>83 négatifs validés <span class="conf v">vérifié</span></h4><p>Appliqués manuellement via la bibliothèque partagée — migrent tels quels vers les nouvelles campagnes.</p></div>
+    <div class="ccard ok"><h4>Campagnes intentionnelles <span class="conf v">vérifié</span></h4><p>AVV Montréal (noms de restos = voulu), Recettes/accords (pizza-sushi = voulu), Recrutement. Conservées telles quelles, hors du rebuild.</p></div>
+    <div class="ccard ok"><h4>Scripts Command Center <span class="conf v">vérifié</span></h4><p>Versions corrigées du 12 juillet (Budget Monitor v5.1, isPreview() guard, etc.) — remapper sur la nouvelle arborescence avant réactivation complète.</p></div>
+    <div class="ccard warn"><h4>Historique de conversion</h4><p>Nouvelles campagnes = apprentissage Smart Bidding remis à zéro. Prévoir 2-4 semaines de flottement et une bascule progressive des budgets, pas un switch sec.</p></div>
+  </div>
+
+</section>
+
+<!-- ============ TQ ============ -->
+<section class="acc" data-acc="tq">
+
+  <div class="block-title"><span class="num">2.1</span><h2>Cadrage corrigé</h2></div>
+  <div class="callout yellow">
+    <h4>TQ n'est pas un compte à problème de Quality Score</h4>
+    <p>QS moyen : <b>8,69/10</b>. Les vrais problèmes sont structurels : mots-clés à volume zéro, budget capté par des termes concurrents, et une protection de marque inactive.</p>
+  </div>
+  <div class="stat-grid" style="margin-top:16px;">
+    <div class="stat"><div class="big">8,69</div><div class="lbl">QS moyen — sain <span class="conf v">vérifié</span></div></div>
+    <div class="stat"><div class="big">64%</div><div class="lbl">mots-clés à volume zéro (3 083 / 4 847) <span class="conf v">vérifié</span></div></div>
+    <div class="stat"><div class="big">1,83M</div><div class="lbl">recherches/mois « nouvelles TVA » — trafic non qualifié <span class="conf v">vérifié</span></div></div>
+    <div class="stat"><div class="big">30 j</div><div class="lbl">fenêtre video_start — intentionnelle, assumée <span class="conf v">vérifié</span></div></div>
+  </div>
+
+  <div class="block-title"><span class="num">2.2</span><h2>Action immédiate — protection de marque</h2></div>
+  <div class="callout red">
+    <h4>La marque n'est pas protégée en ce moment</h4>
+    <p><span class="mono">[télé québec]</span> en exact existe — mais dans une campagne <b>pausée/terminée</b> <span class="conf v">vérifié</span>. Première action du rebuild, avant tout le reste : remettre la protection de marque dans une campagne active. C'est la seule action urgente du compte.</p>
+  </div>
+
+  <div class="block-title"><span class="num">2.3</span><h2>Couverture complète du compte</h2></div>
+  <table style="margin-bottom:8px;">
+    <tr><th>Levier</th><th>Statut dans cette architecture</th></tr>
+    <tr><td class="kw">Search Brand</td><td>Inclus — action URGENTE : réactiver la protection de marque</td></tr>
+    <tr><td class="kw">Search Émissions</td><td>Inclus — liste blanche à remplir depuis l'export Keywords Everywhere (critère : volume réel)</td></tr>
+    <tr><td class="kw">Search Jeunesse/intentions</td><td>Inclus — 3 groupes, termes vérifiés placés (émission jeunesse, chansons enfants, télé-réalité)</td></tr>
+    <tr><td class="kw">Conquête concurrentielle</td><td>Optionnelle — go/no-go Melissa/Émilie requis avant construction</td></tr>
+    <tr><td class="kw">Vidéo / Demand Gen</td><td>Conditionnelle — statut « contenu enfants » à vérifier d'abord</td></tr>
+    <tr><td class="kw">Display</td><td><b>Non inclus au rebuild</b> — aucune donnée vérifiée sur l'existant; à discuter séparément si besoin</td></tr>
+    <tr><td class="kw">Négatifs</td><td>Concurrents + 3 083 volume-zéro en pause + protection mission-critique du script ✓</td></tr>
+    <tr><td class="kw">Annonces</td><td>Angle RSA défini par groupe dans l'arbre — textes finaux à rédiger avec l'équipe TQ</td></tr>
+  </table>
+
+  <div class="block-title"><span class="num">2.4</span><h2>Arborescence — nouvelles campagnes</h2></div>
+  <div class="lede">FR uniquement. Structure par intention réelle, pas par thème d'émission. Clique pour déplier.</div>
+  <div class="tree" id="tree-tq"></div>
+
+  <div class="block-title"><span class="num">2.5</span><h2>Termes légitimes à QS bas — réalignement, pas restructuration</h2></div>
+  <table>
+    <tr><th>Terme</th><th>QS</th><th>Situation</th><th>Fix</th></tr>
+    <tr><td class="kw">télé-réalité</td><td><span class="qsval qsA">3/10</span></td><td>Légitime, dépense élevée <span class="conf v">vérifié</span></td><td>Alignement annonce/LP dans son groupe — pas de nouveau groupe</td></tr>
+    <tr><td class="kw">chansons enfants</td><td><span class="qsval qsA">3/10</span></td><td>Légitime, dépense élevée <span class="conf v">vérifié</span></td><td>Même logique — LP vers le contenu jeunesse correspondant</td></tr>
+  </table>
+
+  <div class="block-title"><span class="num">2.6</span><h2>Liste négative &amp; gouvernance scripts</h2></div>
+  <div class="ccard" style="border-left-color:var(--tq)">
+    <h4>Concurrents (sauf conquête assumée en 04)</h4>
+    <div class="neg-list">
+      <span class="neg-chip">TVA</span><span class="neg-chip">Radio-Canada / ICI</span><span class="neg-chip">Noovo</span><span class="neg-chip">tou.tv</span>
+    </div>
+  </div>
+  <div class="callout green">
+    <h4>Protection mission-critique en place</h4>
+    <p>Le Search Terms Miner tourne maintenant avec la liste de protection des termes mission-critiques (correctif du 12 juillet, suite à l'incident du 2 juillet où des termes légitimes avaient été ajoutés en négatif). Aucun ajout automatique de négatif sans validation manuelle.</p>
+  </div>
+
+  <div class="block-title"><span class="num">2.7</span><h2>Mesure — lire la performance correctement</h2></div>
+  <div class="card-grid">
+    <div class="ccard ok"><h4>Fenêtre 30 jours assumée</h4><p>Décision client intentionnelle (2 juin). Ne pas « corriger ». Les baselines et cibles se calibrent sur la réalité 30 jours — et aucune comparaison pré/post 2 juin n'est valide.</p></div>
+    <div class="ccard ok"><h4>Tracking</h4><p>Aucun GTM. video_start importé de GA4. Toute modification de définition d'événement se fait côté GA4.</p></div>
+  </div>
+
+</section>
+
+</div>
+
+<footer>
+  <div class="wrap" style="padding:0;">Architecture v2 — reconstruction post-audit · Cossette Média · Tommy Dubé · marqueurs de confiance sur chaque fait</div>
+</footer>
+
+<script>
+const treeData = {
+  saq: [
+    {id:"01", title:"saq-search-brand-fr", tag:"fr", desc:"Protection de marque — cliquer pour les groupes", children:[
+      {t:"marque-generale", kw:"[saq], \"saq\", saq en ligne (ex.), saq.com (ex.)", lp:"saq.com/fr (accueil)", ad:"RSA marque : livraison, cueillette, sélection — titre 1 épinglé « SAQ »"},
+      {t:"marque-produit", kw:"saq vin (ex.), saq gin (ex.), saq whisky (ex.) — à valider avec les termes réels du compte", lp:"catégorie correspondante", ad:"RSA marque + catégorie"},
+      {t:"marque-succursale", kw:"saq près de moi (ex.), saq heures (ex.) — à valider", lp:"localisateur de succursales", ad:"RSA succursale + extension de lieu"}
+    ]},
+    {id:"02", title:"saq-search-brand-en", tag:"en", desc:"Miroir anglophone — mêmes 3 groupes", children:[
+      {t:"brand-general / brand-product / brand-store", kw:"[saq], saq online (ex.), saq wine (ex.)", lp:"saq.com/en", ad:"RSA rédigées nativement EN — pas de traduction littérale"}
+    ]},
+    {id:"03", title:"saq-search-nonbrand-fr", tag:"fr", desc:"7 groupes à thème serré par intention", children:[
+      {t:"vins-region-qc", kw:"vin du québec ✓ (QS3-4, 5 403$ combiné), vin québécois ✓, vin rouge québec (ex.)", lp:"catégorie vins québécois", ad:"RSA fierté locale + sélection — titre épinglé « Vins du Québec »"},
+      {t:"vins-type", kw:"vin rouge (ex.), vin blanc (ex.), mousseux (ex.) — à valider par volume", lp:"catégories par type", ad:"RSA par type, sélection + conseils"},
+      {t:"vins-accords", kw:"quel vin avec X (ex.), vin pour poisson (ex.)", lp:"guide accords mets-vins", ad:"RSA orientée conseil/accord"},
+      {t:"spiritueux", kw:"gin québécois (ex.), whisky (ex.), tequila (ex.)", lp:"catégories spiritueux", ad:"RSA catégorie + découverte"},
+      {t:"cocktails-recettes", kw:"tequila sunrise ✓ (QS1, 722$), dirty martini (FR si volume — à valider), mojito recette (ex.)", lp:"pages recettes cocktails — intention recette, PAS catégorie produit", ad:"RSA orientée recette : « Recette + ingrédients disponibles » — c'est LE fix QS de ce segment"},
+      {t:"biere-cidre", kw:"cidre de glace (ex.), bière québécoise (ex.)", lp:"catégorie bière/cidre", ad:"RSA catégorie"},
+      {t:"cadeaux-coffrets", kw:"coffret vin cadeau (ex.), idée cadeau alcool (ex.)", lp:"page cadeaux saisonnière", ad:"RSA occasion : fêtes, hôte, remerciement"}
+    ]},
+    {id:"04", title:"saq-search-nonbrand-en", tag:"en", desc:"Miroir — groupes natifs EN", children:[
+      {t:"quebec-wines", kw:"quebec wine (ex.)", lp:"/en quebec wines", ad:"RSA native EN"},
+      {t:"wine-pairings", kw:"wine pairing ✓ (QS5, 4 368$), wine with fish (ex.)", lp:"/en guide accords", ad:"RSA conseil accord — fix QS documenté"},
+      {t:"cocktails-recipes", kw:"dirty martini ✓ (QS1, 1 006$), margarita recipe (ex.)", lp:"pages recettes EN — dirty-martini-ec confirmée existante ✓", ad:"RSA recette : le mot-clé vit ICI, pas dans un groupe dédié"},
+      {t:"spirits / beer-cider / gifts / wine-types", kw:"structure miroir des groupes FR — à valider par volume EN réel", lp:"catégories /en", ad:"RSA natives EN"}
+    ]},
+    {id:"05", title:"saq-shopping-fr + saq-shopping-en", tag:"fr", desc:"Priorité Haute vs PMax — cliquer", children:[
+      {t:"Groupes de produits", kw:"subdivision du flux : vins / spiritueux / bière-cidre / cadeaux-coffrets", lp:"fiches produit du flux", ad:"titres/descriptions du flux — conformité alcool à valider (ABV, pas de langage incitatif)"},
+      {t:"Priorité", kw:"Shopping = Haute, PMax = standard", lp:"—", ad:"contrôle de quelle campagne capte le clic en cas de chevauchement"}
+    ]},
+    {id:"06", title:"saq-pmax-fr + saq-pmax-en", tag:"fr", desc:"4 asset groups par langue — cliquer", children:[
+      {t:"pmax-vins / pmax-spiritueux / pmax-cocktails-recettes / pmax-cadeaux", kw:"search themes = mêmes intentions que le Search", lp:"flux Shopping filtré par catégorie + assets texte/image par thème", ad:"exclusions : requêtes déjà performantes en Search structuré (anti-cannibalisation, via insights PMax)"},
+      {t:"Signaux permis", kw:"search themes + in-market génériques Google", lp:"—", ad:"RIEN de personnalisé — politique alcool + Loi 25. Statut « restrictive » = normal."}
+    ]},
+    {id:"07", title:"Campagnes conservées telles quelles", tag:"keep", desc:"Hors rebuild — intentionnelles ✓", children:[
+      {t:"AVV Montréal", kw:"noms de restaurants BYOB = ciblage voulu ✓", lp:"conservée telle quelle", ad:"—"},
+      {t:"Recettes / accords", kw:"pizza, sushi... = cross-sell voulu ✓", lp:"conservée telle quelle", ad:"—"},
+      {t:"Recrutement RH", kw:"entrepôt, caissier... = campagne active voulue ✓", lp:"conservée telle quelle", ad:"—"},
+      {t:"shopping-fea", kw:"GELÉE ✓ — tROAS 100% d'Alexandre (7 juillet)", lp:"discussion requise avant le 17 août", ad:"ROAS affiché exclut les Store visits"}
+    ]}
+  ],
+  tq: [
+    {id:"01", title:"tq-search-brand-fr", tag:"frtq", desc:"URGENT — protection de marque inactive", children:[
+      {t:"marque", kw:"[télé québec] ✓ (existe en exact, campagne pausée — à réactiver), \"telequebec\" (ex.), tele quebec (ex.), variantes/fautes", lp:"telequebec.tv accueil", ad:"RSA marque : plateforme, gratuit, contenu — titre épinglé « Télé-Québec »"}
+    ]},
+    {id:"02", title:"tq-search-emissions-fr", tag:"frtq", desc:"Liste blanche — un groupe par émission VALIDÉE par volume", children:[
+      {t:"Critère d'entrée strict", kw:"volume Keywords Everywhere mesurable — PAS le catalogue complet. Liste à remplir depuis l'export KE existant (aucun titre présumé ici pour éviter d'inventer)", lp:"page de l'émission sur telequebec.tv", ad:"RSA par émission : regarder gratuitement + plateforme"},
+      {t:"Les 3 083 volume-zéro", kw:"pause immédiate, PAS négatif permanent (le volume peut réapparaître au retour d'une saison)", lp:"—", ad:"—"}
+    ]},
+    {id:"03", title:"tq-search-jeunesse-fr", tag:"frtq", desc:"Intentions réelles — petit volume mais qualifié", children:[
+      {t:"contenu-jeunesse", kw:"émission jeunesse ✓ (320/mois), télé québec jeunesse ✓ (320/mois), contenu éducatif enfant (ex.)", lp:"section jeunesse telequebec.tv", ad:"RSA parents : gratuit, éducatif, québécois"},
+      {t:"contenu-musique-enfants", kw:"chansons enfants ✓ (QS3, dépense élevée — fix = alignement annonce/LP ici, pas de nouveau groupe)", lp:"contenu musical jeunesse correspondant", ad:"RSA alignée sur l'intention chansons"},
+      {t:"tele-realite", kw:"télé-réalité ✓ (QS3, dépense élevée — même logique de réalignement)", lp:"contenu télé-réalité TQ correspondant", ad:"RSA alignée — vérifier que la LP correspond vraiment à l'offre TQ"}
+    ]},
+    {id:"04", title:"tq-search-conquete-fr", tag:"cond", desc:"Optionnelle — go/no-go Melissa/Émilie", children:[
+      {t:"conquete-concurrents", kw:"nouvelles tva (1,83M/mois ✓), radio-canada, noovo — trafic massif mais non qualifié", lp:"accueil ou page info TQ", ad:"budget plafonné, KPI notoriété assumé, JAMAIS mélangée aux campagnes d'intention propre"}
+    ]},
+    {id:"05", title:"tq-video-demandgen-fr", tag:"cond", desc:"Conditionnelle — statut « contenu enfants » à vérifier d'abord", children:[
+      {t:"Préalable bloquant", kw:"politique Google : aucune pub personnalisée aux -18 ans; « made for kids » = aucun tracker tiers", lp:"vérifier l'étiquetage réel des propriétés TQ avec Melissa/Émilie AVANT de construire", ad:"si feu vert : campagne engagement alignée video_start (fenêtre 30j assumée)"}
+    ]}
+  ]
+};
+
+function badgeLabel(tag){
+  return {fr:"FR",en:"EN",frtq:"FR",keep:"Conservé",cond:"Conditionnel"}[tag] || tag;
+}
+
+function buildTree(containerId, data){
+  const el = document.getElementById(containerId);
+  data.forEach(node=>{
+    const hasChildren = node.children && node.children.length;
+    const nodeDiv = document.createElement('div');
+    nodeDiv.className = 'node';
+    nodeDiv.innerHTML = `
+      <div class="node-head" onclick="this.parentElement.classList.toggle('open')">
+        <span class="chev">${hasChildren ? '▶' : '·'}</span>
+        <span class="id mono">${node.id}</span>
+        <span class="title mono">${node.title}</span>
+        <span class="badge ${node.tag}">${badgeLabel(node.tag)}</span>
+        <span class="desc">${node.desc}</span>
+      </div>
+    `;
+    if(hasChildren){
+      const childWrap = document.createElement('div');
+      childWrap.className = 'children';
+      node.children.forEach(c=>{
+        const leaf = document.createElement('div');
+        leaf.className = 'leaf';
+        let inner = `<b class="mono">${c.t}</b>`;
+        if(c.kw) inner += `<span class="lp">MC : ${c.kw}</span>`;
+        if(c.lp && c.lp !== '—') inner += `<span class="lp">LP : ${c.lp}</span>`;
+        if(c.ad && c.ad !== '—') inner += `<span class="lp">Annonce/note : ${c.ad}</span>`;
+        leaf.innerHTML = inner;
+        childWrap.appendChild(leaf);
+      });
+      nodeDiv.appendChild(childWrap);
+    }
+    el.appendChild(nodeDiv);
+  });
+}
+buildTree('tree-saq', treeData.saq);
+buildTree('tree-tq', treeData.tq);
+
+function switchAcc(acc){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.acc===acc));
+  document.querySelectorAll('section.acc').forEach(s=>s.classList.toggle('active', s.dataset.acc===acc));
+}
+</script>
+
+</body>
+</html>
