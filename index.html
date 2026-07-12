@@ -142,7 +142,7 @@
     <p class="subtitle">SAQ &amp; Télé-Québec — reconstruction complète après audit des erreurs des versions précédentes. Chaque fait porte un marqueur : <span class="conf v">vérifié</span> = confirmé dans les sessions de travail récentes · <span class="conf q">à confirmer</span> = non sourcé solidement, ne pas agir dessus sans validation.</p>
     <div class="meta-row">
       <span><b>Préparé par</b> Tommy Dubé</span>
-      <span><b>Version</b> 2.0 — 12 juillet 2026</span>
+      <span><b>Version</b> 2.2 — 12 juillet 2026 · exports KE intégrés</span>
       <span><b>Statut</b> Proposition à valider morceau par morceau</span>
     </div>
     <div class="tabs">
@@ -191,6 +191,14 @@
     <p>À partir du 17 août, Google applique strictement les cibles sur les campagnes limitées par budget. Impact direct : (1) la question shopping-fea avec Alexandre (tROAS 100% posé le 7 juillet) est urgente avant cette date, (2) toute nouvelle campagne de cette architecture démarre <b>sans cible</b> — la cible s'ajoute seulement quand le volume de conversion est stable ET que le budget n'est pas limitant.</p>
   </div>
 
+  <div class="block-title"><span class="num">0.25</span><h2>Ajouts v2.1 — gaps trouvés à la réanalyse</h2></div>
+  <div class="card-grid">
+    <div class="ccard ok"><h4>Segment Personnalités TQ — était ABSENT <span class="conf v">vérifié</span></h4><p>Identifié le 9 juillet comme l'opportunité #1 (sarah-jeanne labrosse 22 200/mois, bianca gervais 9 900, pierre-yves mcsween 9 900 — zéro compétition, CPC nul) mais oublié dans la v2. Ajouté comme campagne 02.</p></div>
+    <div class="ccard ok"><h4>Conventions de nommage réelles <span class="conf v">vérifié</span></h4><p>TQ : <span class="mono">Tele-Qc - Brand - I-1CA-MS-001 - FR</span>. SAQ : <span class="mono">Generic // Thème // Langue</span>. La convention proposée en v2 est remplacée par les vraies — les nouvelles campagnes suivent le format existant de chaque compte.</p></div>
+    <div class="ccard ok"><h4>Pause volume-zéro : DÉJÀ FAIT <span class="conf v">vérifié</span></h4><p>La v2 présentait la pause des 3 083 termes comme une action à faire — elle a été exécutée en live le 9 juillet et validée. Corrigé partout.</p></div>
+    <div class="ccard ok"><h4>Exports KE reçus et intégrés ✓ (12 juillet)</h4><p>3 fichiers : TQ (4 847 termes, portée CA ✓) + SAQ (13 837 termes en 2 fichiers). Tous les groupes sont peuplés avec volumes réels. <b>Nuance critique (vérifiée ligne par ligne) :</b> TQ = 100% Canada/CAD ✓. SAQ = 100% global/USD — volumes mondiaux, valides pour le tri relatif entre termes, PAS pour du volume canadien absolu. Recommandé : relancer l'export SAQ avec réglage Canada avant de figer les priorités budgétaires. Découvertes : bannières SAQ (Sélection/Express/Dépôt) = groupes Brand naturels; SAQ a aussi 6 001 termes volume-zéro (43%) à pauser comme TQ; rosalie bonenfant (8 100/mois) s'ajoute aux personnalités; la liste concurrents TQ complète est bien plus longue que 4 marques.</p></div>
+  </div>
+
   <div class="block-title"><span class="num">0.3</span><h2>Points encore ouverts — ne pas agir dessus</h2></div>
   <div class="card-grid">
     <div class="ccard warn"><h4>Store Visits exclues du ROAS <span class="conf q">à confirmer</span></h4><p>Retirées par Melissa (fév. 2025) — portée exacte à confirmer : réglage de compte ou spécifique à shopping-fea?</p></div>
@@ -216,7 +224,8 @@
   <table style="margin-bottom:8px;">
     <tr><th>Levier</th><th>Statut dans cette architecture</th></tr>
     <tr><td class="kw">Search Brand FR + EN</td><td>Inclus — 3 groupes définis par langue (voir arbre 1.3)</td></tr>
-    <tr><td class="kw">Search Non-Brand FR + EN</td><td>Inclus — 7 groupes d'intention par langue, mots-clés vérifiés placés</td></tr>
+    <tr><td class="kw">Search Non-Brand FR + EN</td><td>Inclus — 8 groupes d'intention par langue, peuplés des exports KE (volumes globaux — tri relatif)</td></tr>
+    <tr><td class="kw">Nettoyage volume-zéro SAQ</td><td><b>NOUVEAU ✓</b> : 6 001 termes à volume zéro (43%) découverts dans les exports — même traitement que TQ (pause massive via script, DRY_RUN d'abord)</td></tr>
     <tr><td class="kw">Shopping FR + EN</td><td>Inclus — groupes de produits par catégorie, priorité Haute</td></tr>
     <tr><td class="kw">Performance Max FR + EN</td><td>Inclus — 4 asset groups par langue, anti-cannibalisation</td></tr>
     <tr><td class="kw">Display / Demand Gen</td><td><b>Non inclus au rebuild</b> — aucune donnée vérifiée sur l'existant dans nos échanges; à discuter séparément si besoin</td></tr>
@@ -276,20 +285,21 @@
 
   <div class="block-title"><span class="num">2.2</span><h2>Action immédiate — protection de marque</h2></div>
   <div class="callout red">
-    <h4>La marque n'est pas protégée en ce moment</h4>
-    <p><span class="mono">[télé québec]</span> en exact existe — mais dans une campagne <b>pausée/terminée</b> <span class="conf v">vérifié</span>. Première action du rebuild, avant tout le reste : remettre la protection de marque dans une campagne active. C'est la seule action urgente du compte.</p>
+    <h4>Protection de marque — statut à trancher en premier</h4>
+    <p>Campagne Brand : <span class="mono">Tele-Qc - Brand - I-1CA-MS-001 - FR</span> (ID 20952320355) <span class="conf v">vérifié</span> — et <span class="mono">[télé québec]</span> exact y est CONFIRMÉ <span class="conf v">vérifié 12 juillet</span>. Dernière chose à trancher : le statut ACTIF de la campagne (l'exact avait été observé dans une campagne pausée/terminée). Si pausée → réactiver, c'est l'action #1.</p>
   </div>
 
   <div class="block-title"><span class="num">2.3</span><h2>Couverture complète du compte</h2></div>
   <table style="margin-bottom:8px;">
     <tr><th>Levier</th><th>Statut dans cette architecture</th></tr>
-    <tr><td class="kw">Search Brand</td><td>Inclus — action URGENTE : réactiver la protection de marque</td></tr>
-    <tr><td class="kw">Search Émissions</td><td>Inclus — liste blanche à remplir depuis l'export Keywords Everywhere (critère : volume réel)</td></tr>
-    <tr><td class="kw">Search Jeunesse/intentions</td><td>Inclus — 3 groupes, termes vérifiés placés (émission jeunesse, chansons enfants, télé-réalité)</td></tr>
+    <tr><td class="kw">Search Brand</td><td>Campagne EXISTANTE ✓ : <span class="mono">Tele-Qc - Brand - I-1CA-MS-001 - FR</span> — vérifier son statut actif ([télé québec] exact était dans une campagne pausée)</td></tr>
+    <tr><td class="kw">Search Personnalités</td><td><b>NOUVELLE — opportunité #1</b> ✓ : sarah-jeanne labrosse (22 200/mois), bianca gervais (9 900), pierre-yves mcsween (9 900) — volume réel, zéro compétition, CPC nul</td></tr>
+    <tr><td class="kw">Search Émissions</td><td>Inclus — liste blanche par volume réel (bluey en français ✓ légitime; Passe-Partout, Cochon Dingue à confirmer par volume)</td></tr>
+    <tr><td class="kw">Search Jeunesse/intentions</td><td>Inclus — termes vérifiés placés (émission jeunesse 320/mois, chansons enfants, télé-réalité)</td></tr>
     <tr><td class="kw">Conquête concurrentielle</td><td>Optionnelle — go/no-go Melissa/Émilie requis avant construction</td></tr>
     <tr><td class="kw">Vidéo / Demand Gen</td><td>Conditionnelle — statut « contenu enfants » à vérifier d'abord</td></tr>
     <tr><td class="kw">Display</td><td><b>Non inclus au rebuild</b> — aucune donnée vérifiée sur l'existant; à discuter séparément si besoin</td></tr>
-    <tr><td class="kw">Négatifs</td><td>Concurrents + 3 083 volume-zéro en pause + protection mission-critique du script ✓</td></tr>
+    <tr><td class="kw">Négatifs / pauses</td><td>3 083 volume-zéro : <b>DÉJÀ pausés ✓</b> (script live du 9 juillet, validé) · concurrents en négatif · homonymes (scorpion, dingo, koala) exclus · protection mission-critique du script ✓</td></tr>
     <tr><td class="kw">Annonces</td><td>Angle RSA défini par groupe dans l'arbre — textes finaux à rédiger avec l'équipe TQ</td></tr>
   </table>
 
@@ -333,62 +343,79 @@
 <script>
 const treeData = {
   saq: [
-    {id:"01", title:"saq-search-brand-fr", tag:"fr", desc:"Protection de marque — cliquer pour les groupes", children:[
-      {t:"marque-generale", kw:"[saq], \"saq\", saq en ligne (ex.), saq.com (ex.)", lp:"saq.com/fr (accueil)", ad:"RSA marque : livraison, cueillette, sélection — titre 1 épinglé « SAQ »"},
-      {t:"marque-produit", kw:"saq vin (ex.), saq gin (ex.), saq whisky (ex.) — à valider avec les termes réels du compte", lp:"catégorie correspondante", ad:"RSA marque + catégorie"},
-      {t:"marque-succursale", kw:"saq près de moi (ex.), saq heures (ex.) — à valider", lp:"localisateur de succursales", ad:"RSA succursale + extension de lieu"}
+    {id:"01", title:"Brand FR (Generic // Marque // FR)", tag:"fr", desc:"823K/mois sur « saq » — 4 groupes", children:[
+      {t:"marque-generale", kw:"saq ✓ (823 000) — saq near me retiré d'ici : vit UNIQUEMENT dans Brand EN (anti-doublon)", lp:"saq.com/fr", ad:"RSA marque : livraison, cueillette, sélection — titre 1 épinglé « SAQ »"},
+      {t:"marque-bannieres (DÉCOUVERTE des exports)", kw:"saq sélection ✓ (90 500), saq express ✓ (49 500), saq dépôt ✓ (27 100) — chaque bannière a son intention propre", lp:"pages bannières correspondantes", ad:"RSA par bannière : Dépôt = prix/volume, Express = proximité/heures, Sélection = spécialités"},
+      {t:"marque-circulaire", kw:"circular saq ✓ (201 000) — intention promo/rabais massive", lp:"page promotions/circulaire saq.com", ad:"RSA promos en cours — vérifier conformité alcool (pas d'incitatif à la surconsommation)"},
+      {t:"marque-succursale", kw:"saq near me, heures, succursale (variantes dans l'export)", lp:"localisateur de succursales", ad:"RSA + extension de lieu"}
     ]},
-    {id:"02", title:"saq-search-brand-en", tag:"en", desc:"Miroir anglophone — mêmes 3 groupes", children:[
-      {t:"brand-general / brand-product / brand-store", kw:"[saq], saq online (ex.), saq wine (ex.)", lp:"saq.com/en", ad:"RSA rédigées nativement EN — pas de traduction littérale"}
+    {id:"02", title:"Brand EN", tag:"en", desc:"Miroir — saq near me (165K) y vit", children:[
+      {t:"brand-general / brand-store", kw:"saq near me ✓ (165 000), wine shop near me ✓ (3 350 000 — générique EN à évaluer : volume énorme mais intention locale non-marque)", lp:"saq.com/en + localisateur", ad:"RSA natives EN"}
     ]},
-    {id:"03", title:"saq-search-nonbrand-fr", tag:"fr", desc:"7 groupes à thème serré par intention", children:[
-      {t:"vins-region-qc", kw:"vin du québec ✓ (QS3-4, 5 403$ combiné), vin québécois ✓, vin rouge québec (ex.)", lp:"catégorie vins québécois", ad:"RSA fierté locale + sélection — titre épinglé « Vins du Québec »"},
-      {t:"vins-type", kw:"vin rouge (ex.), vin blanc (ex.), mousseux (ex.) — à valider par volume", lp:"catégories par type", ad:"RSA par type, sélection + conseils"},
-      {t:"vins-accords", kw:"quel vin avec X (ex.), vin pour poisson (ex.)", lp:"guide accords mets-vins", ad:"RSA orientée conseil/accord"},
-      {t:"spiritueux", kw:"gin québécois (ex.), whisky (ex.), tequila (ex.)", lp:"catégories spiritueux", ad:"RSA catégorie + découverte"},
-      {t:"cocktails-recettes", kw:"tequila sunrise ✓ (QS1, 722$), dirty martini (FR si volume — à valider), mojito recette (ex.)", lp:"pages recettes cocktails — intention recette, PAS catégorie produit", ad:"RSA orientée recette : « Recette + ingrédients disponibles » — c'est LE fix QS de ce segment"},
-      {t:"biere-cidre", kw:"cidre de glace (ex.), bière québécoise (ex.)", lp:"catégorie bière/cidre", ad:"RSA catégorie"},
-      {t:"cadeaux-coffrets", kw:"coffret vin cadeau (ex.), idée cadeau alcool (ex.)", lp:"page cadeaux saisonnière", ad:"RSA occasion : fêtes, hôte, remerciement"}
+    {id:"03", title:"Non-Brand FR — 8 groupes d'intention", tag:"fr", desc:"Peuplé des exports KE — volumes GLOBAUX (voir nuance)", children:[
+      {t:"vins-region-qc", kw:"vin du Québec ✓ (880), vin québécois ✓ (590), vin quebec ✓ (590), vin blanc du Québec ✓ (70)", lp:"catégorie vins québécois", ad:"RSA fierté locale — QS3-4 actuel, 5 403$ : LE réalignement prioritaire FR"},
+      {t:"vins-mousseux-champagne", kw:"champagne ✓ (1 000 000), prosecco ✓ (823 000), champagne veuve clicquot / moët / ruinart ✓ (27 100 ch.)", lp:"catégorie mousseux + pages marques", ad:"RSA occasion/célébration; marques premium protégées par Script 3"},
+      {t:"vins-accords", kw:"accord mets vins ✓ (8 100), vin pour raclette ✓ (5 400), vin avec raclette ✓ (2 900), vin pour pizza ✓ (1 900), quel vin pour raclette ✓ (1 300), vin avec foie gras ✓ (1 000), vin pour huîtres ✓ (720)", lp:"guide accords mets-vins", ad:"RSA conseil — raclette = saisonnier hiver à anticiper"},
+      {t:"vins-type", kw:"vin rouge ✓ (27 100), vin nature saq ✓ (110), vin rosé saq ✓ (70)", lp:"catégories par type", ad:"RSA par type"},
+      {t:"spiritueux", kw:"tequila ✓ (1 500 000, comp. HIGH), whisky ✓ (1 500 000, HIGH), vodka ✓ (1 220 000), gin ✓ (1 000 000, HIGH), cognac ✓ (550 000, LOW = opportunité CPC). Négatifs croisés ICI : [tequila sunrise], [gin tonique] et tout nom de cocktail → ils vivent dans cocktails-recettes", lp:"catégories spiritueux", ad:"RSA catégorie — comp. High sur tequila/whisky/gin : surveiller CPC, prioriser cognac (Low)"},
+      {t:"cocktails-recettes", kw:"margarita ✓ (1 500 000), aperol spritz ✓ (1 500 000), mojito ✓ (1 220 000), moscow mule ✓ (823 000), mimosa ✓ (823 000), espresso martini ✓ (673 000), paloma ✓ (673 000), old fashioned / bloody mary / sangria ✓ (550 000 ch.), tequila sunrise ✓ (368-450 000), dirty martini ✓ (246 000), gin tonique ✓ (368 000 — déplacé de spiritueux : c'est un cocktail)", lp:"pages recettes cocktails — intention recette, PAS catégorie produit", ad:"RSA recette + ingrédients dispo. UN groupe (ou 2-3 clusters si volume le justifie) — jamais un groupe par drink"},
+      {t:"biere-cidre", kw:"bière ✓ (110 000), cidre ✓ (49 500), biere ipa ✓ (14 800), bière belge ✓ (8 100). ATTENTION : bière sans alcool ✓ (22 200) → appartient à shopping-fea, pas ici", lp:"catégorie bière/cidre", ad:"RSA catégorie; exclure « sans alcool » de ce groupe (négatif croisé avec shopping-fea)"},
+      {t:"cadeaux-coffrets", kw:"coffret cadeau vin ✓ (1 600), vin cadeau ✓ (1 300). PRUDENCE : idée cadeau ✓ (74 000) = trop générique, à tester en expression stricte seulement. champagne gift → déplacé vers Non-Brand EN", lp:"page cadeaux saisonnière", ad:"RSA occasion — pic Noël (idée cadeau noel 40 500)"}
     ]},
-    {id:"04", title:"saq-search-nonbrand-en", tag:"en", desc:"Miroir — groupes natifs EN", children:[
-      {t:"quebec-wines", kw:"quebec wine (ex.)", lp:"/en quebec wines", ad:"RSA native EN"},
-      {t:"wine-pairings", kw:"wine pairing ✓ (QS5, 4 368$), wine with fish (ex.)", lp:"/en guide accords", ad:"RSA conseil accord — fix QS documenté"},
-      {t:"cocktails-recipes", kw:"dirty martini ✓ (QS1, 1 006$), margarita recipe (ex.)", lp:"pages recettes EN — dirty-martini-ec confirmée existante ✓", ad:"RSA recette : le mot-clé vit ICI, pas dans un groupe dédié"},
-      {t:"spirits / beer-cider / gifts / wine-types", kw:"structure miroir des groupes FR — à valider par volume EN réel", lp:"catégories /en", ad:"RSA natives EN"}
+    {id:"04", title:"Non-Brand EN — miroir", tag:"en", desc:"wine pairing (QS5, 4 368$) + dirty martini y vivent", children:[
+      {t:"wine-pairings", kw:"wine pairing ✓ (QS5, 4 368$ — réalignement prioritaire EN)", lp:"/en guide accords", ad:"RSA conseil accord"},
+      {t:"cocktails-recipes", kw:"dirty martini ✓ (246 000 global, QS1, 1 006$), margarita recipe ✓ (550 000)", lp:"pages recettes EN — dirty-martini-ec confirmée ✓", ad:"RSA recette — le fix QS1 se fait ICI, dans le groupe d'intention"},
+      {t:"gifts", kw:"champagne gift ✓ (6 600), red wine gift ✓ (2 900), champagne gift box ✓ (1 900) — déplacés du groupe cadeaux FR (anti-doublon de langue)", lp:"/en page cadeaux", ad:"RSA natives EN"},
+      {t:"spirits / wines", kw:"miroir des groupes FR — volumes EN dans l'export", lp:"catégories /en", ad:"RSA natives EN"}
     ]},
-    {id:"05", title:"saq-shopping-fr + saq-shopping-en", tag:"fr", desc:"Priorité Haute vs PMax — cliquer", children:[
-      {t:"Groupes de produits", kw:"subdivision du flux : vins / spiritueux / bière-cidre / cadeaux-coffrets", lp:"fiches produit du flux", ad:"titres/descriptions du flux — conformité alcool à valider (ABV, pas de langage incitatif)"},
-      {t:"Priorité", kw:"Shopping = Haute, PMax = standard", lp:"—", ad:"contrôle de quelle campagne capte le clic en cas de chevauchement"}
+    {id:"05", title:"Shopping FR + EN", tag:"fr", desc:"Priorité Haute vs PMax", children:[
+      {t:"Groupes de produits", kw:"subdivision du flux : vins / mousseux / spiritueux / bière-cidre / cadeaux", lp:"fiches produit du flux", ad:"conformité alcool des titres à valider"}
     ]},
-    {id:"06", title:"saq-pmax-fr + saq-pmax-en", tag:"fr", desc:"4 asset groups par langue — cliquer", children:[
-      {t:"pmax-vins / pmax-spiritueux / pmax-cocktails-recettes / pmax-cadeaux", kw:"search themes = mêmes intentions que le Search", lp:"flux Shopping filtré par catégorie + assets texte/image par thème", ad:"exclusions : requêtes déjà performantes en Search structuré (anti-cannibalisation, via insights PMax)"},
-      {t:"Signaux permis", kw:"search themes + in-market génériques Google", lp:"—", ad:"RIEN de personnalisé — politique alcool + Loi 25. Statut « restrictive » = normal."}
+    {id:"06", title:"PMax FR + EN", tag:"fr", desc:"5 asset groups par langue", children:[
+      {t:"pmax-vins / mousseux / spiritueux / cocktails-recettes / cadeaux", kw:"search themes = mêmes intentions que le Search", lp:"flux filtré + assets par thème", ad:"exclusions anti-cannibalisation via insights PMax. Rien de personnalisé. Statut restrictive = normal."}
     ]},
     {id:"07", title:"Campagnes conservées telles quelles", tag:"keep", desc:"Hors rebuild — intentionnelles ✓", children:[
-      {t:"AVV Montréal", kw:"noms de restaurants BYOB = ciblage voulu ✓", lp:"conservée telle quelle", ad:"—"},
-      {t:"Recettes / accords", kw:"pizza, sushi... = cross-sell voulu ✓", lp:"conservée telle quelle", ad:"—"},
-      {t:"Recrutement RH", kw:"entrepôt, caissier... = campagne active voulue ✓", lp:"conservée telle quelle", ad:"—"},
-      {t:"shopping-fea", kw:"GELÉE ✓ — tROAS 100% d'Alexandre (7 juillet)", lp:"discussion requise avant le 17 août", ad:"ROAS affiché exclut les Store visits"}
+      {t:"Generic // Apportez votre vin Montréal // FR ✓", kw:"noms de restaurants apportez-votre-vin = voulu ✓", lp:"conservée", ad:"—"},
+      {t:"Recettes / accords (pizza-sushi)", kw:"pizza ✓ (16,6M global), sushi ✓ (9,1M global) = cross-sell voulu ✓ — volumes globaux énormes : vérifier le match type (expression/exact seulement, jamais broad)", lp:"conservée", ad:"—"},
+      {t:"Recrutement RH", kw:"warehouse, cashier, caissier ✓ = voulu", lp:"conservée", ad:"—"},
+      {t:"shopping-fea (faible en alcool)", kw:"GELÉE ✓ — tROAS 100% d'Alexandre. vin sans alcool ✓ + bière sans alcool ✓ (22 200) = SES termes", lp:"discussion Alexandre avant le 17 août", ad:"ROAS affiché exclut Store visits"}
+    ]},
+    {id:"08", title:"Négatifs & garde-fous", tag:"keep", desc:"Faits vérifiés du nettoyage + exports", children:[
+      {t:"Hors-sujet confirmés", kw:"+oculus ✓ (seul MC hors-sujet DANS le compte) + les exports confirment les pièges : jordan ✓ (3,35M, HIGH — Jordan Winery légitime), cadillac ✓ (1,83M — appellation Bordeaux légitime), valentino ✓ (2,24M — mode), william hill ✓ (5M — casino/vin ambigu)", lp:"—", ad:"83 négatifs migrent ✓. Jamais de négatif court sur un terme à double sens produit."},
+      {t:"Volume du compte", kw:"13 837 analysés ✓, 6 001 à volume zéro (43%) → même traitement que TQ : pause massive. 26 304 MC actifs → cible 2 000-5 000", lp:"—", ad:"70 marques premium sous Script 3 ✓"},
+      {t:"RÈGLE ANTI-CANNIBALISATION (obligatoire)", kw:"(1) « saq » en négatif expression dans TOUTES les campagnes Non-Brand — les requêtes marque vont au Brand. (2) Noms de cocktails en négatif dans spiritueux. (3) « sans alcool » en négatif dans biere-cidre et spiritueux → shopping-fea. (4) Termes EN en négatif dans campagnes FR et inversement. (5) Requêtes performantes du Search exclues des asset groups PMax", lp:"—", ad:"un mot-clé = UN seul groupe dans tout le compte — vérifié dans cette version"}
     ]}
   ],
   tq: [
-    {id:"01", title:"tq-search-brand-fr", tag:"frtq", desc:"URGENT — protection de marque inactive", children:[
-      {t:"marque", kw:"[télé québec] ✓ (existe en exact, campagne pausée — à réactiver), \"telequebec\" (ex.), tele quebec (ex.), variantes/fautes", lp:"telequebec.tv accueil", ad:"RSA marque : plateforme, gratuit, contenu — titre épinglé « Télé-Québec »"}
+    {id:"01", title:"Tele-Qc - Brand - I-1CA-MS-001 - FR", tag:"frtq", desc:"EXISTANTE ✓ (ID 20952320355) — 3 groupes internes", children:[
+      {t:"marque-pure", kw:"telequebec ✓ (40 500 + 3 variantes d'accents à 40 500 ch.), télé québec ✓ (14 800 + ~6 variantes à 14 800 ch.)", lp:"telequebec.tv accueil", ad:"[télé québec] exact CONFIRMÉ dans cette campagne ✓ (Tommy, 12 juillet). Reste à confirmer : la campagne est-elle ACTIVE (l'exact avait été observé dans une campagne pausée)"},
+      {t:"marque-horaire-direct", kw:"telequebec horaire ✓ (9 900 ×2 variantes), telequebec en direct ✓ (1 900 ×3), horaire télé québec ✓ (1 300 ×8 variantes)", lp:"page horaire / direct", ad:"RSA « Horaire et diffusion en direct » — intention distincte de la marque pure"},
+      {t:"marque-contenus", kw:"telequebec jeunesse ✓ (1 300 ×2), coucou télé québec ✓ (880 ×3), zone vidéo ✓ (90-110), ciné cadeau ✓ (140 — saisonnier Noël), telequebec passe partout ✓ (590)", lp:"sections correspondantes", ad:"RSA par sous-intention marque+contenu"}
     ]},
-    {id:"02", title:"tq-search-emissions-fr", tag:"frtq", desc:"Liste blanche — un groupe par émission VALIDÉE par volume", children:[
-      {t:"Critère d'entrée strict", kw:"volume Keywords Everywhere mesurable — PAS le catalogue complet. Liste à remplir depuis l'export KE existant (aucun titre présumé ici pour éviter d'inventer)", lp:"page de l'émission sur telequebec.tv", ad:"RSA par émission : regarder gratuitement + plateforme"},
-      {t:"Les 3 083 volume-zéro", kw:"pause immédiate, PAS négatif permanent (le volume peut réapparaître au retour d'une saison)", lp:"—", ad:"—"}
+    {id:"02", title:"Tele-Qc - Personnalites - FR (À CRÉER — n'existe pas encore dans le compte)", tag:"frtq", desc:"Opportunité #1 — CPC ~0$, zéro compétition", children:[
+      {t:"personnalites-confirmees", kw:"sarah jeanne labrosse ✓ (22 200 ×3 formes), bianca gervais ✓ (9 900), pierre-yves mcsween ✓ (9 900 ×2 + McSween 1 600 + indice mcsween tele quebec ✓), rosalie bonenfant ✓ (8 100)", lp:"page de la personnalité / son émission", ad:"RSA « {Personnalité} sur Télé-Québec — gratuit ». Vérifier que chaque personnalité est ENCORE associée à TQ avant activation"},
+      {t:"cas-ricardo — À TRANCHER", kw:"ricardo ✓ (49 500), ricardo larrivée ✓ (1 900) — présent dans l'export TQ mais son association actuelle à TQ est à confirmer AVANT toute activation (risque trafic déçu si erroné)", lp:"—", ad:"ne pas activer sans confirmation"}
     ]},
-    {id:"03", title:"tq-search-jeunesse-fr", tag:"frtq", desc:"Intentions réelles — petit volume mais qualifié", children:[
-      {t:"contenu-jeunesse", kw:"émission jeunesse ✓ (320/mois), télé québec jeunesse ✓ (320/mois), contenu éducatif enfant (ex.)", lp:"section jeunesse telequebec.tv", ad:"RSA parents : gratuit, éducatif, québécois"},
-      {t:"contenu-musique-enfants", kw:"chansons enfants ✓ (QS3, dépense élevée — fix = alignement annonce/LP ici, pas de nouveau groupe)", lp:"contenu musical jeunesse correspondant", ad:"RSA alignée sur l'intention chansons"},
-      {t:"tele-realite", kw:"télé-réalité ✓ (QS3, dépense élevée — même logique de réalignement)", lp:"contenu télé-réalité TQ correspondant", ad:"RSA alignée — vérifier que la LP correspond vraiment à l'offre TQ"}
+    {id:"03", title:"Tele-Qc - Emissions - FR", tag:"frtq", desc:"Liste blanche peuplée des exports — 2 niveaux de confiance", children:[
+      {t:"emissions-candidates-solides", kw:"cochon dingue ✓ (40 500), passe partout ✓ (18 100 + passepartout 1 300), Bluey ✓ (74 000, comp. Medium), barbapapa ✓ (22 200), bluey en français ✓ (légitime, retiré des négatifs le 2 juillet)", lp:"page de chaque émission sur telequebec.tv", ad:"RSA par émission : « Regardez {émission} gratuitement ». Un groupe par émission à ce volume — c'est justifié ici"},
+      {t:"emissions-a-valider (risque homonyme)", kw:"hélix/helix ✓ (33 100 ch., CPC 0,01$), gaslight ✓ (27 100, CPC 0,01$ — probablement le terme psycho, pas l'émission), High school ✓ (40 500, CPC 1,73$), paw patrouille ✓ (60 500, Medium — diffusion TQ à confirmer)", lp:"—", ad:"CPC quasi nul + volume élevé = signal d'homonyme. Valider l'intention réelle (CTR test à petit budget) avant d'engager"}
     ]},
-    {id:"04", title:"tq-search-conquete-fr", tag:"cond", desc:"Optionnelle — go/no-go Melissa/Émilie", children:[
-      {t:"conquete-concurrents", kw:"nouvelles tva (1,83M/mois ✓), radio-canada, noovo — trafic massif mais non qualifié", lp:"accueil ou page info TQ", ad:"budget plafonné, KPI notoriété assumé, JAMAIS mélangée aux campagnes d'intention propre"}
+    {id:"04", title:"Tele-Qc - Jeunesse-Intentions - FR", tag:"frtq", desc:"Intentions réelles, peuplées des exports", children:[
+      {t:"contenu-jeunesse", kw:"zone jeunesse ✓ (1 600, CPC 0$), émission jeunesse ✓ (320), émission jeunesse québécoise ✓ (90), émission éducative ✓ (50), emission enfant ✓ (94), série jeunesse ✓ (70), film jeunesse ✓ (140)", lp:"section jeunesse telequebec.tv", ad:"RSA parents : gratuit, éducatif, québécois"},
+      {t:"contenu-musique-enfants", kw:"chanson enfant ✓ (2 600), chansons pour enfants ✓ (1 500), Chansons enfants ✓ (790, QS3 actuel — réalignement annonce/LP), contine enfant ✓ (350), berceuse enfant ✓ (99)", lp:"contenu musical jeunesse", ad:"RSA alignée chansons — CPC élevés sur contines (1,34-2,50$) : surveiller"},
+      {t:"dessins-animes", kw:"dessin animés ✓ (5 400), bebe dessin animé ✓ (140), émission pour bébé ✓ (90)", lp:"section dessins animés / tout-petits", ad:"RSA tout-petits"},
+      {t:"tele-realite", kw:"télé-réalité ✓ (QS3, dépense élevée — réalignement)", lp:"contenu télé-réalité TQ", ad:"vérifier que la LP correspond vraiment à l'offre TQ"}
     ]},
-    {id:"05", title:"tq-video-demandgen-fr", tag:"cond", desc:"Conditionnelle — statut « contenu enfants » à vérifier d'abord", children:[
-      {t:"Préalable bloquant", kw:"politique Google : aucune pub personnalisée aux -18 ans; « made for kids » = aucun tracker tiers", lp:"vérifier l'étiquetage réel des propriétés TQ avec Melissa/Émilie AVANT de construire", ad:"si feu vert : campagne engagement alignée video_start (fenêtre 30j assumée)"}
+    {id:"05", title:"Tele-Qc - Conquete - FR", tag:"cond", desc:"Optionnelle — go/no-go Melissa/Émilie. Liste complète des exports :", children:[
+      {t:"concurrents-mesures", kw:"nouvelles tva ✓ (1,83M ×4 variantes), ici radio canada ✓ (823 000), tva en direct ✓ (301 000), tva sport ✓ (201 000), noovo ✓ (165 000), tva ✓ (165 000), tou tv ✓ (90 500), tva rattrapage ✓ (49 500), noovo en direct ✓ (33 100), tva plus ✓ (22 200), v ✓ (201 000 — ancienne chaîne V)", lp:"si GO : accueil TQ, budget plafonné, KPI notoriété", ad:"si NO-GO : TOUTE cette liste passe en négatifs partagés — elle est plus longue que les 4 marques de la v2"}
+    ]},
+    {id:"06", title:"Tele-Qc - Video-DemandGen - FR", tag:"cond", desc:"Conditionnelle — statut « contenu enfants » d'abord", children:[
+      {t:"Préalable bloquant", kw:"aucune pub personnalisée aux -18 ans; « made for kids » = aucun tracker tiers", lp:"vérifier l'étiquetage des propriétés TQ avec Melissa/Émilie", ad:"si feu vert : engagement aligné video_start (30j assumé)"}
+    ]},
+    {id:"07", title:"Exclusions transversales", tag:"frtq", desc:"Homonymes confirmés par les exports", children:[
+      {t:"homonymes-emissions", kw:"dingo ✓ (40 500), scorpion ✓ (40 500), koala ✓ (33 100, CPC 5,83$ !), pélican ✓ (33 100), dessert ✓ (201 000), cuisine ✓ (22 200), compétition ✓ (22 200), pourquoi ✓ (22 200), verglas ✓ (27 100), intelligence artificielle ✓ (27 100)", lp:"—", ad:"exclure de toutes les campagnes d'intention — mots de titres d'émissions sans intention TQ. koala à 5,83$ CPC = le plus dangereux"},
+      {t:"volume-zéro : RÉGLÉ ✓", kw:"3 083 termes pausés (script live 9 juillet, validé)", lp:"—", ad:"garder en pause, pas en négatif"},
+      {t:"RÈGLE ANTI-CANNIBALISATION (obligatoire)", kw:"(1) « telequebec » + « télé québec » (toutes variantes) en négatif expression dans Personnalités, Émissions, Jeunesse et Conquête — les requêtes marque+X restent au Brand. (2) Noms d'émissions en négatif dans Jeunesse (ex. [passe partout] négatif → il vit dans Émissions). (3) Noms de personnalités en négatif dans Émissions. (4) Si Conquête = NO-GO : ses 11 termes concurrents passent en négatifs partagés sur tout le compte", lp:"—", ad:"un mot-clé = UN seul groupe — vérifié dans cette version"}
     ]}
   ]
 };
@@ -430,6 +457,7 @@ function buildTree(containerId, data){
     el.appendChild(nodeDiv);
   });
 }
+
 buildTree('tree-saq', treeData.saq);
 buildTree('tree-tq', treeData.tq);
 
